@@ -1,0 +1,12 @@
+Microsoft Windows [Version 10.0.19045.3448]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\IanShaw\localProgramming\fd\robot_backend\output\00_F2>fdsinit
+
+type helpfds for help on running fds
+C:\Users\IanShaw\localProgramming\fd\robot_backend\output\00_F2>fds_local -p 9 -o 23 00_FS3_FSA.fds
+[mpiexec@LAPTOP-CODK33TV] Sending Ctrl-C to processes as requested
+[mpiexec@LAPTOP-CODK33TV] Press Ctrl-C again to force abort
+Terminate batch job (Y/N)? 
+
+C:\Users\IanShaw\localProgramming\fd\robot_backend\output\00_F2>

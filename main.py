@@ -11,19 +11,12 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# import time
-
-# while True:
-#     with open('progress.txt', 'r') as file:
-#         progress = file.read().strip()
-#         print(f'Current progress: {progress}')
-
-#     time.sleep(5)  # Wait for 5 seconds before checking again
-
-
+from dashboard_logic import read_progress
 @app.get("/dashboard")
-async def read_users():
+async def show_progress():
     # just have text of progression
+    output_folder = './output'
+    progress_object = read_progress(output_folder)
 
     # later create front end
-    return ["Pickle", "Rick"]
+    return progress_object

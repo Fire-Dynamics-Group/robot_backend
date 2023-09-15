@@ -7,7 +7,7 @@ Created on Tue May  3 09:17:18 2022
 
 import os
 import shutil
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, STDOUT
 
 def Count_Meshes(filename):
     filename = open(filename)
@@ -15,10 +15,14 @@ def Count_Meshes(filename):
     occurrences = data.count("&MESH ID=")    
     return int(occurrences)
 
+path_to_cfd_dir = './cfd'
+output_dir = './output'
+output_base = os.path.abspath(output_dir)
 while True:   ## infinite loop to allow people to add files whilst it is running
-    files = os.listdir()
+    files = os.listdir(path_to_cfd_dir)
     fds_files = []
-    base = (os.getcwd())
+    # base = (os.getcwd(path_to_cfd_dir))
+    base = os.path.abspath(path_to_cfd_dir)
     cmd = 'cmd.exe'
     
     for i in files:
@@ -30,77 +34,31 @@ while True:   ## infinite loop to allow people to add files whilst it is running
         break
     
     for i in fds_files:
-        meshes = Count_Meshes(i)
+        current_file_path = f"{base}/{i}"
+        meshes = Count_Meshes(current_file_path)
         print(meshes)
-        foldername = i.replace('.fds','')
-        os.mkdir(f"{foldername}")
-        dest_dir = f"{foldername}" 
-        src_file = f"{i}"
+        current_output_path = f"{output_base}/{i[:4]}2" # changed from current_file_path
+        # folder_path = current_output_path.replace('.fds','')
+        folder_path = current_output_path
+        os.mkdir(folder_path)
+        dest_dir = folder_path
+        src_file = current_file_path
         shutil.copy(src_file, dest_dir)
-        os.remove(f"{i}")
-        string = f"{base}/{foldername}"
+        # os.remove(current_file_path) # should be removed on mod comp
+        string = folder_path
         os.chdir(string)
+        progress_file = f'{os.path.abspath("")}/fds_progress2.txt'
+        error_file = f'{os.path.abspath("")}/error.txt'
         string2 = str.encode(f"fds_local -p {meshes} -o {32-meshes} {i}\n")
-        p = Popen(cmd, stdin=PIPE , stdout=PIPE, bufsize=0, shell=True)  
-        p.stdin.write(b"fdsinit\n")
-        p.stdin.write(string2)
-        p.stdin.close()
-        p.wait();
-        os.chdir(base)
-    
-# import os
-# import shutil
-# from subprocess import Popen, PIPE
 
-import os
-import shutil
-from subprocess import Popen, PIPE
-
-while True:
-    files = os.listdir()
-    fds_files = []
-    base = os.getcwd()
-    cmd = 'cmd.exe'
-
-    for i in files:
-        if '.fds' in i:
-            fds_files.append(i)
-
-    print(fds_files)
-
-    if fds_files == []:
-        break
-
-    for i in fds_files:
-        meshes = Count_Meshes(i)
-        print(meshes)
-        foldername = i.replace('.fds', '')
-        os.mkdir(f"{foldername}")
-        dest_dir = f"{foldername}"
-        src_file = f"{i}"
-        shutil.copy(src_file, dest_dir)
-        os.remove(f"{i}")
-        string = f"{base}/{foldername}"
-        os.chdir(string)
-        # TODO: get total sim time from fds file
-
-        with open('fds_progress.txt', 'a') as log_file:
-            string2 = str.encode(f"fds_local -p {meshes} -o {32-meshes} {i}\n")
-            p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1, shell=True, universal_newlines=True)
-            p.stdin.write("fdsinit\n")
-            p.stdin.write(string2)
-            p.stdin.close()
-
-            # Read output line by line, and print it to console and write it to the log file
-            # TODO: update progress object in log file
-            # start time; total sim time; progress
-            # get current progress; if changed from last update
-            # wait 10 secs between checking?
-            for line in p.stdout:
-                # if sim time > current sim time => change object
-                print(line.strip())  # Print to console
-                log_file.write(line)  # Write to log file
-
-            p.wait()
+        with open(progress_file, 'a') as log_file:
+            with open(error_file, 'a') as error_file:
+                # TODO: 
+                p = Popen(cmd, stdin=PIPE, stdout=log_file, stderr=error_file, bufsize=1, shell=True)
+                p.stdin.write(b"fdsinit\n")
+                p.stdin.write(string2)
+                p.stdin.close()
+                p.wait()    
 
         os.chdir(base)
+

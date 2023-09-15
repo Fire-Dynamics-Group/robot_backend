@@ -1,0 +1,37 @@
+
+ Starting FDS ...
+
+ MPI Process      7 started on LAPTOP-CODK33TV
+ MPI Process      0 started on LAPTOP-CODK33TV
+ MPI Process      1 started on LAPTOP-CODK33TV
+ MPI Process      2 started on LAPTOP-CODK33TV
+ MPI Process      4 started on LAPTOP-CODK33TV
+ MPI Process      3 started on LAPTOP-CODK33TV
+ MPI Process      5 started on LAPTOP-CODK33TV
+ MPI Process      6 started on LAPTOP-CODK33TV
+ MPI Process      8 started on LAPTOP-CODK33TV
+
+ Reading FDS input file ...
+
+WARNING: SPEC REAC_FUEL is not in the table of pre-defined species. Any unassigned SPEC variables in the input were assigned the properties of nitrogen.
+
+ Fire Dynamics Simulator
+
+ Current Date     : September 15, 2023  15:22:14
+ Revision         : FDS6.7.9-0-gec52dee42-release
+ Revision Date    : Sun Jun 26 14:36:40 2022 -0400
+ Compiler         : 
+ Compilation Date : Tue 06/28/2022  11:17 PM
+
+ MPI Enabled;    Number of MPI Processes:       9
+ OpenMP Enabled; Number of OpenMP Threads:     23
+
+ MPI version: 3.1
+ MPI library version: Intel(R) MPI Library 2021.6 for Windows* OS
+
+
+ Job TITLE        : FS3 FSA
+ Job ID string    : FS3_FSA
+
+[mpiexec@LAPTOP-CODK33TV] wmain (mpiexec.c:2165): assert (pg->intel.exitcodes != NULL) failed
+[mpiexec@LAPTOP-CODK33TV] HYD_sock_write (..\windows\src\hydra_sock.c:387): write error (errno = 34)
