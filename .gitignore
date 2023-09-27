@@ -1,3 +1,5 @@
 output/
 spare_cfd/
 __pycache__/
+other_cfd/
+cfd_prequeue/

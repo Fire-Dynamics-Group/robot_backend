@@ -16,37 +16,37 @@ def Count_Meshes(filename):
     return int(occurrences)
 
 spare_cfd_dir = './spare_cfd' # used for testing - copied across to dropbox
-path_to_cfd_dir = './cfd_prequeue' # dropbox folder
-run_dir = './cfd_queue' # fast hard drive - queued jobs
+path_to_cfd_dir = r'C:\Users\IanShaw\Dropbox\CFD_queue' # dropbox folder
+run_dir = './cfd_run' # fast hard drive - queued jobs
 run_base = os.path.abspath(run_dir)
 '''
     # TODO: copy over from spare_cfd to dropbox
 
 '''
-output_dir = './output' # final location - completed jobs - dropbox folder
+output_dir = r'C:\Users\IanShaw\Dropbox\CFD_completed' # final location - completed jobs - dropbox folder
 output_base = os.path.abspath(output_dir)
 isTesting = True
-if isTesting:
-    # TODO: delete all files in dropbox
-    base_remove = os.path.abspath(path_to_cfd_dir)
+# if isTesting:
+#     # TODO: delete all files in dropbox
+#     base_remove = os.path.abspath(path_to_cfd_dir)
 
-    for filename in os.listdir(base_remove):
-        file_path = os.path.join(base_remove, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print('Failed to delete %s. Reason: %s' % (file_path, e))
+#     for filename in os.listdir(base_remove):
+#         file_path = os.path.join(base_remove, filename)
+#         try:
+#             if os.path.isfile(file_path) or os.path.islink(file_path):
+#                 os.unlink(file_path)
+#             elif os.path.isdir(file_path):
+#                 shutil.rmtree(file_path)
+#         except Exception as e:
+#             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-    # copy over from spare_cfd to dropbox/prequeue
-    base = os.path.abspath(spare_cfd_dir)
-    files_to_copy = os.listdir(spare_cfd_dir)
-    for file in files_to_copy:
-        src_file = f'{base}/{file}'
-        dest_dir = path_to_cfd_dir
-        shutil.copy(src_file, dest_dir)
+#     # copy over from spare_cfd to dropbox/prequeue
+#     base = os.path.abspath(spare_cfd_dir)
+#     files_to_copy = os.listdir(spare_cfd_dir)
+#     for file in files_to_copy:
+#         src_file = f'{base}/{file}'
+#         dest_dir = path_to_cfd_dir
+#         shutil.copy(src_file, dest_dir)
 
     # TODO: delete all files in fast hard drive/queue that are in the prequeue if testing
 
@@ -81,24 +81,24 @@ while True:   ## infinite loop to allow people to add files whilst it is running
         src_file = current_file_path
         # TODO: try and catch for file already existing -> add number to end of file
         shutil.move(src_file, dest_dir)
-        # os.remove(current_file_path) # should be removed on mod comp
         string = folder_path
         os.chdir(string)
         progress_file = f'{os.path.abspath("")}/fds_progress.txt'
         error_file = f'{os.path.abspath("")}/error.txt'
         string2 = str.encode(f"fds_local -p {meshes} -o {32-meshes} {i}\n")
 
-        # with open(progress_file, 'a') as log_file:
-        #     with open(error_file, 'a') as error_file:
-        #         # TODO: 
-        #         p = Popen(cmd, stdin=PIPE, stdout=log_file, stderr=error_file, bufsize=1, shell=True)
-        #         p.stdin.write(b"fdsinit\n")
-        #         p.stdin.write(string2)
-        #         p.stdin.close()
-        #         p.wait()    
-        # # TODO: copy over from dropbox to fast hard drive
-        # # TODO: transfer to output folder - run in output folder
+        if not isTesting: # does not run fds sim if testing
+            with open(progress_file, 'a') as log_file:
+                with open(error_file, 'a') as error_file:
+                    # TODO: 
+                    p = Popen(cmd, stdin=PIPE, stdout=log_file, stderr=error_file, bufsize=1, shell=True)
+                    p.stdin.write(b"fdsinit\n")
+                    p.stdin.write(string2)
+                    p.stdin.close()
+                    p.wait()    
         os.chdir(base)
+        # TODO: copy over from dropbox to fast hard drive
+        # TODO: transfer to output folder - run in output folder
         original = dest_dir
         target = output_base
         shutil.move(original, target)
