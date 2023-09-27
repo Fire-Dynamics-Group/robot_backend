@@ -64,8 +64,13 @@ def read_progress(output_folder_path):
         progress_object[folder]['has_progress_file'] = has_progress_file
         # store time started, finished and total duration
         
-
-    return progress_object
+    projects = list(progress_object.keys())
+    progress_list = []
+    for project in projects:
+        temp = progress_object[project]
+        temp['name'] = project
+        progress_list.append(temp)
+    return progress_list
 
 
 read_progress('./output')
