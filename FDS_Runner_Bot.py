@@ -16,14 +16,14 @@ def Count_Meshes(filename):
     return int(occurrences)
 
 spare_cfd_dir = './spare_cfd' # used for testing - copied across to dropbox
-path_to_cfd_dir = r'C:\Users\IanShaw\Dropbox\CFD_queue' # dropbox folder
+path_to_cfd_dir = r'C:\%userprofile%\Dropbox\CFD_queue' # dropbox folder
 run_dir = './cfd_run' # fast hard drive - queued jobs
 run_base = os.path.abspath(run_dir)
 '''
     # TODO: copy over from spare_cfd to dropbox
 
 '''
-output_dir = r'C:\Users\IanShaw\Dropbox\CFD_completed' # final location - completed jobs - dropbox folder
+output_dir = r'C:\%userprofile%\Dropbox\CFD_completed' # final location - completed jobs - dropbox folder
 output_base = os.path.abspath(output_dir)
 isTesting = True
 # if isTesting:
